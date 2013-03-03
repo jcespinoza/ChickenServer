@@ -38,7 +38,7 @@ public:
  //READ: Los public slots son los metodos que se llaman cuando se generan ciertos eventos
  // en QT estos eventos se declaran como SIGNALS.
 public slots:
-        //READ: Slot que se ejecuta cuando se detecta la señal o evento de una nueva conexion
+        //READ: Slot que se ejecuta cuando se detecta la seÃ±al o evento de una nueva conexion
         void newConnection();
         //READ: Slot que se ejecuta cuando el cliente ha confirmado la conexion enviando
         // su NICK
@@ -57,8 +57,8 @@ private:
         //READ: Tenemos una variable booleana que nos indica si el server ha iniciado o no
         bool server_started;
         int Cantidad_Conexiones;
-
-
+        void tellEmToStart();
+signals:
 };
 
 #endif // SERVER_H

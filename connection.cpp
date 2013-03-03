@@ -52,7 +52,7 @@ void Connection::sendMessage(QString msg) {
 
 }
 void Connection::disconnect() {
-       //READ: Emitir una señal al server para desconectarse
+       //READ: Emitir una seÃ±al al server para desconectarse
         emit disconnected(this, nick);
 
 }

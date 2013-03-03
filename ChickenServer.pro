@@ -19,15 +19,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     server.h \
-    connection.h \
-    ../ChickenClient/ui_mainwindow.h \
-    ../ChickenClient/mainwindow.h \
-    ../ChickenClient/jugador.h \
-    ../ChickenClient/gamearea.h \
-    ../ChickenClient/clientconnection.h
+    connection.h
 
 FORMS    += mainwindow.ui \
-    ../ChickenClient/mainwindow.ui
 
 RESOURCES += \
-    ../ChickenClient/recursos.qrc

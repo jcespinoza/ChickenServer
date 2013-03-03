@@ -115,7 +115,7 @@
      <x>0</x>
      <y>0</y>
      <width>687</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -130,6 +130,14 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>btnStart</tabstop>
+  <tabstop>btnStop</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>btnReset</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>btnQuit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

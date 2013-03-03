@@ -26,39 +26,34 @@ public:
         int veces;
         //READ: Metodo publico para enviar la lista de nicks al resto de conexiones
         void sendNicks(QStringList *nicks);
-        bool canPlay()const{return canPlay;}
 
  private:
         //READ: Este es de los metodos mas importantes, ya que es el metodo que analiza
         // el mensaje para saber que comandos ejecuto un cliente y partir el mensaje
-        // de forma adecuada y luego levanta la señal de NewMessage para que el server
+        // de forma adecuada y luego levanta la seÃ±al de NewMessage para que el server
         // la procese y la envie al resto de conexiones siempre y sea necesario
         void parseMessage(QString msg);
-        bool canPlay;
 
 private slots:
         //READ: Este metodo privado es el que se ejecuta cuando el SOCKET de esta
-        //conexion recibe la señal de nuevos datos en la conexion y este metodo revisa
+        //conexion recibe la seÃ±al de nuevos datos en la conexion y este metodo revisa
         // hasta encontrar \n\r y luego llama a ParseMessage
         void recv();
 public slots:
         //READ: Metodo que se usa para enviar un mensaje en esta conexion al socket respectivo
         void sendMessage(QString);
-        //READ: Metodo que se usa cuando el socket de esta conexion recibe una señal de
+        //READ: Metodo que se usa cuando el socket de esta conexion recibe una seÃ±al de
         // Desconexion.
         void disconnect();
 
 signals:
-        //READ: Estas son las señales que una conexion puede EMITIR
-        //estas señales se emiten al server, ya sea que llego un nuevo mensaje
+        //READ: Estas son las seÃ±ales que una conexion puede EMITIR
+        //estas seÃ±ales se emiten al server, ya sea que llego un nuevo mensaje
         // que se conecto un nuevo cliente o se desconecto un cliente
-        // TODAS estas señales DEBEN indicar la conexion en curso que emite la señal
+        // TODAS estas seÃ±ales DEBEN indicar la conexion en curso que emite la seÃ±al
         void newMessage(Connection*,QString);
         void newMove(Connection*,QString);
         void connected(Connection*, QString);
         void disconnected(Connection*, QString);
-
-
 };
-
 #endif // CONNECTION_H

@@ -2,7 +2,7 @@
 
 Server::Server()
 {
-    //READ: Iinicializar la bandera en false, enlazar o conectar el evento o señal
+    //READ: Iinicializar la bandera en false, enlazar o conectar el evento o seÃ±al
     // de newConnection que genere una instancia de esta clase y que la reciba y procese
     // esta misma instancia por el SLOT newConnection ..
     // Limpiar la lista de conexiones
@@ -90,7 +90,6 @@ void Server::stop()
         this->casillas=0;
         this->log->append(tr("Servidor detenido!!! "));
     }
-
 }
 bool Server::getStatus()
 {
@@ -115,6 +114,8 @@ void Server::newConnection() {
         connect(con, SIGNAL(disconnected(Connection*, QString)), this , SLOT(disconnected(Connection*, QString)));
 
         this->log->append("Nueva conexion..." + con->socket->peerAddress().toString());
+        if(Lista_Conexiones.count()==Cantidad_Conexiones)
+            tellEmToStart();
     }
     else
     {
@@ -183,6 +184,10 @@ void Server::procesarMensaje(Connection *con, QString mensaje)
 
 void Server::procesarMovimiento(Connection *con, QString mensaje)
 {
+    if(Lista_Conexiones.count() < Cantidad_Conexiones){
+        con->sendMessage("No hay suficientes conectados");
+        return;
+    }
     // OBtener de mensaje las coordenadas o posiciones donde desea moverse
     // ya sabemos que jugador es atravez de la Connection *con, y asi sabemos
     // su numero
@@ -191,7 +196,8 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
      int fila =mensaje.mid(0,1).toInt(&band,10);
      int col = mensaje.mid(2,1).toInt(&band,10);
      if (this->TABLERO[fila][col]==-1) // Esta libre
-     {   // Setear el numero de jugador o indice en esa posicion del tablero
+     {
+         // Setear el numero de jugador o indice en esa posicion del tablero
          // Enviar el mensaje al resto
          this->TABLERO[fila][col]= con->indice_lista_conexion;
          QString temp;
@@ -218,8 +224,15 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
               mens = "INFO:" + mens + "\n\r";
               // Les envio el score final
               this->sendMessage(mens);
-
          }
-
      }
+}
+
+void Server::tellEmToStart(){
+    for(int i = 0; i < Lista_Conexiones.count(); i++){
+        Connection* t = Lista_Conexiones.at(i);
+        if(t != 0){
+            t->sendMessage("PLAY");
+        }
+    }
 }
