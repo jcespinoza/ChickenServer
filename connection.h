@@ -55,5 +55,6 @@ signals:
         void newMove(Connection*,QString);
         void connected(Connection*, QString);
         void disconnected(Connection*, QString);
+        void removePieza(Connection*, QString);
 };
 #endif // CONNECTION_H

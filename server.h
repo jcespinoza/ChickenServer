@@ -31,6 +31,7 @@ public:
      // Matriz de enteros que representa el tablero
     int TABLERO[8][8];
     int casillas;
+    int moves;
     //READ: Un apuntador al textedit donde iremos colocando los mensajes
     QTextEdit *log;
     void reset();
@@ -49,6 +50,7 @@ public slots:
         // y estos mensajes deben enviarse al resto
         void procesarMensaje(Connection *con, QString mensaje);
         void procesarMovimiento(Connection *con, QString mensaje);
+        void processRemover(Connection*, QString);
 
 private:
         //READ: Tenemos una lista de nicks por separado aunque podriamos haber usado

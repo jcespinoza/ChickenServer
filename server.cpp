@@ -15,7 +15,7 @@ Server::Server()
     for (int i=0; i<8 ; i++)
       for (int j=0; j<8 ; j++)
           this->TABLERO[i][j]=-1;
-
+    moves = 0;
 
 }
 void Server::reset()
@@ -30,7 +30,7 @@ void Server::reset()
         this->Lista_Conexiones.at(i)->veces=0;
         i++;
    }
-
+    moves = 0;
 }
 
 Server::~Server()
@@ -108,6 +108,7 @@ void Server::newConnection() {
 
         connect(con, SIGNAL(newMessage(Connection*,QString)), this, SLOT(procesarMensaje(Connection*,QString)));
         connect(con, SIGNAL(newMove(Connection*,QString)), this, SLOT(procesarMovimiento(Connection*,QString)));
+        connect(con, SIGNAL(removePieza(Connection*,QString)), this, SLOT(processRemover(Connection*,QString)));
 
         // connect(this, SIGNAL(newMessage(QString)), con, SLOT(sendMessage(QString)));
         connect(con, SIGNAL(connected(Connection*, QString)), this, SLOT(connected(Connection*, QString)));
@@ -207,7 +208,8 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
          this->log->append(temp);
          con->veces++;  // Aumentar la cantidad de veces que ha puesto fichas exitosamente
          this->casillas++;
-         if (casillas == 64)
+         moves++;
+         if (moves >= 10)
          {
              this->log->append("Bueno se llenaron las casillas, ya no hay nada mas que hacer");
              // Ver quien gano.
@@ -233,6 +235,47 @@ void Server::tellEmToStart(){
         Connection* t = Lista_Conexiones.at(i);
         if(t != 0){
             t->sendMessage("PLAY");
+        }
+    }
+}
+
+void Server::processRemover(Connection *con, QString mensaje){
+    if(Lista_Conexiones.count() < Cantidad_Conexiones){
+        con->sendMessage("No hay suficientes conectados");
+        return;
+    }
+    bool flag;
+    int fila =mensaje.mid(0,1).toInt(&flag,10);
+    int col = mensaje.mid(2,1).toInt(&flag,10);
+    int quien = TABLERO[fila][col];
+
+    if(this->TABLERO[fila][col]!=-1 && TABLERO[fila][col] != con->indice_lista_conexion){
+        this->TABLERO[fila][col] = -1;
+        QString temp;
+        temp.setNum(con->indice_lista_conexion,10);
+        temp= temp + ":" + mensaje.mid(0,1) + ":" + mensaje.mid(2,1) + "\n\r";
+        this->sendMessage("REMOVEOK:"+ temp);
+        this->log->append(temp);
+        Lista_Conexiones.at(quien)->veces--;  // Aumentar la cantidad de veces que ha puesto fichas exitosamente
+        this->casillas++;
+        moves++;
+        if(moves >= 10)
+        {
+            this->log->append("Bueno se llenaron las casillas, ya no hay nada mas que hacer");
+            // Ver quien gano.
+             int i=0;
+             QString mens;
+             while (i<this->Lista_Conexiones.count())
+              {
+                 QString temp;
+                 temp.setNum(this->Lista_Conexiones.at(i)->veces,10);
+                 mens = mens + this->Lista_Conexiones.at(i)->nick + ">" + temp + " ; ";
+
+               i++;
+              }
+             mens = "INFO:" + mens + "\n\r";
+             // Les envio el score final
+             this->sendMessage(mens);
         }
     }
 }

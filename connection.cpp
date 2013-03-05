@@ -38,8 +38,11 @@ void Connection::parseMessage(QString msg) {
                 QString elresto = msg.mid(5 );
                 elresto=elresto.mid(0,elresto.length()-2) ; // Quitarle \n\r
                 emit newMove(this, elresto);
-
-
+        }
+        if(msg.startsWith("REMOVE:")){
+            QString rest = msg.mid(7);
+            rest = rest.mid(0,rest.length()-2);
+            emit removePieza(this, rest);
         }
 
 
