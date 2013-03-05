@@ -88,6 +88,7 @@ void Server::stop()
         this->close();
         this->Cantidad_Conexiones=0;
         this->casillas=0;
+       moves = 0;
         this->log->append(tr("Servidor detenido!!! "));
     }
 }
@@ -226,22 +227,24 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
               mens = "INFO:" + mens + "\n\r";
               // Les envio el score final
               this->sendMessage(mens);
+             sendMessage("STOP\n\r");
          }
      }
 }
 
 void Server::tellEmToStart(){
-    for(int i = 0; i < Lista_Conexiones.count(); i++){
+    /*for(int i = 0; i < Lista_Conexiones.count(); i++){
         Connection* t = Lista_Conexiones.at(i);
         if(t != 0){
             t->sendMessage("PLAY");
         }
-    }
+    }*/
+    sendMessage("PLAY\n\r");
 }
 
 void Server::processRemover(Connection *con, QString mensaje){
     if(Lista_Conexiones.count() < Cantidad_Conexiones){
-        con->sendMessage("No hay suficientes conectados");
+        con->sendMessage("MSG:No hay suficientes conectados\n\r");
         return;
     }
     bool flag;
@@ -254,7 +257,7 @@ void Server::processRemover(Connection *con, QString mensaje){
         QString temp;
         temp.setNum(con->indice_lista_conexion,10);
         temp= temp + ":" + mensaje.mid(0,1) + ":" + mensaje.mid(2,1) + "\n\r";
-        this->sendMessage("REMOVEOK:"+ temp);
+        this->sendMessage("REMOVEOK:"+ temp+"\n\r");
         this->log->append(temp);
         Lista_Conexiones.at(quien)->veces--;  // Aumentar la cantidad de veces que ha puesto fichas exitosamente
         this->casillas++;
@@ -276,6 +279,7 @@ void Server::processRemover(Connection *con, QString mensaje){
              mens = "INFO:" + mens + "\n\r";
              // Les envio el score final
              this->sendMessage(mens);
+             sendMessage("STOP\n\r");
         }
     }
 }

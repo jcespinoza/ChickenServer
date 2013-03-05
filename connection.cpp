@@ -7,7 +7,6 @@ Connection::Connection(QTcpSocket *_socket)
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnect()));
     this->indice_lista_conexion = -1;
     veces=0;
-
 }
 
 void Connection::recv() {
