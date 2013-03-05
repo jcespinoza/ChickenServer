@@ -25,6 +25,7 @@ void MainWindow::on_btnStart_clicked()
     //READ: Iniciar el server en el puerto 7777 o cualquiera que deseen
     // El metodo start recibe de parametro el puerto donde escuchar
     this->ChatServer->start(7777,this->ui->spinBox->value());
+    ChatServer->setMaxMoves(ui->spMoves->value());
 }
 
 void MainWindow::on_btnStop_clicked()
@@ -47,6 +48,7 @@ void MainWindow::on_btnReset_clicked()
     {
         this->ChatServer->sendMessage("RESETGAME: \n\r");
         this->ChatServer->reset();
+        ChatServer->setMaxMoves(ui->spMoves->value());
 
     }
 }

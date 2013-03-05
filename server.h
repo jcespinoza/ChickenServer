@@ -32,6 +32,9 @@ public:
     int TABLERO[8][8];
     int casillas;
     int moves;
+    int maxMoves;
+    void setMaxMoves(int);
+    int getMaxMoves()const{return maxMoves;}
     //READ: Un apuntador al textedit donde iremos colocando los mensajes
     QTextEdit *log;
     void reset();

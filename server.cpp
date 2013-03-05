@@ -16,8 +16,13 @@ Server::Server()
       for (int j=0; j<8 ; j++)
           this->TABLERO[i][j]=-1;
     moves = 0;
-
+    maxMoves = 100;
 }
+
+void Server::setMaxMoves(int m){
+    maxMoves = m;
+}
+
 void Server::reset()
 {
     for (int i=0; i<8 ; i++)
@@ -210,7 +215,7 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
          con->veces++;  // Aumentar la cantidad de veces que ha puesto fichas exitosamente
          this->casillas++;
          moves++;
-         if (moves >= 10)
+         if (moves >= maxMoves)
          {
              this->log->append("Bueno se llenaron las casillas, ya no hay nada mas que hacer");
              // Ver quien gano.
@@ -233,12 +238,6 @@ void Server::procesarMovimiento(Connection *con, QString mensaje)
 }
 
 void Server::tellEmToStart(){
-    /*for(int i = 0; i < Lista_Conexiones.count(); i++){
-        Connection* t = Lista_Conexiones.at(i);
-        if(t != 0){
-            t->sendMessage("PLAY");
-        }
-    }*/
     sendMessage("PLAY\n\r");
 }
 
@@ -262,7 +261,7 @@ void Server::processRemover(Connection *con, QString mensaje){
         Lista_Conexiones.at(quien)->veces--;  // Aumentar la cantidad de veces que ha puesto fichas exitosamente
         this->casillas++;
         moves++;
-        if(moves >= 10)
+        if(moves >= maxMoves)
         {
             this->log->append("Bueno se llenaron las casillas, ya no hay nada mas que hacer");
             // Ver quien gano.
